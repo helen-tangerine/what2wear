@@ -11,4 +11,5 @@ public interface ClosetRepository extends MongoRepository<Clothes, String> {
 
     List<Clothes> findAllByBrandAndColor(String brand, String color);
 
+    Clothes findFirstByBrandAndColorAndSize(String brand, String color, int size);
 }

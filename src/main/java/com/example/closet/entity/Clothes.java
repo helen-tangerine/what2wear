@@ -27,6 +27,6 @@ public class Clothes {
 
     @Override
     public String toString() {
-        return String.format("Clothes[id=%s, brand='%s', color='%s', size='%d']", id, brand, color, size);
+        return String.format("Clothes[brand='%s', color='%s', size='%d']", brand, color, size);
     }
 }
