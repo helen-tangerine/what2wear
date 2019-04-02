@@ -2,6 +2,7 @@ package com.example.closet.controller;
 
 import com.example.closet.entity.Clothes;
 import com.example.closet.repository.ClosetRepository;
+import com.example.closet.services.ClosetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,11 +12,13 @@ import java.util.List;
 @RequestMapping("/closet")
 public class ClosetController {
 
-    private ClosetRepository repository;
+    private final ClosetRepository repository;
+    private final ClosetService closetService;
 
     @Autowired
-    public ClosetController(final ClosetRepository repository) {
+    public ClosetController(ClosetRepository repository, ClosetService closetService) {
         this.repository = repository;
+        this.closetService = closetService;
     }
 
     @PostMapping("/add")
@@ -50,6 +53,12 @@ public class ClosetController {
     public void emptyCloset() {
         System.out.println("Removing all clothes from closet...");
         repository.deleteAll();
+    }
+
+    @GetMapping("/weather/{location}")
+    @ResponseBody
+    public String getWeather(@PathVariable final String location) {
+        return closetService.retrieveCurrentWeather(location);
     }
 
 }
