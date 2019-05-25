@@ -15,18 +15,16 @@ public class Clothes {
     @Id
     private String id;
 
-    private String brand;
+    private int temperature;
     private String color;
-    private int size;
 
-    public Clothes(String brand, String color, int size) {
-        this.brand = brand;
+    public Clothes(int temperature, String color) {
+        this.temperature = temperature;
         this.color = color;
-        this.size = size;
     }
 
     @Override
     public String toString() {
-        return String.format("Clothes[brand='%s', color='%s', size='%d']", brand, color, size);
+        return String.format("Clothes[ideal_temp='%d', color='%s']", temperature, color);
     }
 }

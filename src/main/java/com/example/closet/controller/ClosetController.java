@@ -2,7 +2,7 @@ package com.example.closet.controller;
 
 import com.example.closet.entity.Clothes;
 import com.example.closet.repository.ClosetRepository;
-import com.example.closet.services.ClosetService;
+import com.example.closet.services.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,38 +13,51 @@ import java.util.List;
 public class ClosetController {
 
     private final ClosetRepository repository;
-    private final ClosetService closetService;
+    private final WeatherService weatherService;
 
     @Autowired
-    public ClosetController(ClosetRepository repository, ClosetService closetService) {
+    public ClosetController(ClosetRepository repository, WeatherService weatherService) {
         this.repository = repository;
-        this.closetService = closetService;
+        this.weatherService = weatherService;
     }
+
+    /*
+     * User Facing
+     */
 
     @PostMapping("/add")
     @ResponseBody
-    public Clothes addClothes(@RequestParam final String brand,
-                              @RequestParam final String color,
-                              @RequestParam final int size) {
-        Clothes item = new Clothes(brand, color, size);
+    public Clothes addClothes(@RequestParam final int temperature,
+                              @RequestParam final String color) {
+        Clothes item = new Clothes(temperature, color);
         System.out.println("Adding to closet: " + item.toString());
         repository.save(item);
         return item;
     }
 
+//    @GetMapping("/wear")
+//    @ResponseBody
+//    public List<Clothes> chooseClothes(@RequestParam final int temperature,
+//                                       @RequestParam final String color) {
+//        // TODO
+//    }
+
+    /*
+     * Non-User Facing
+     */
+
     @GetMapping("/find")
     @ResponseBody
-    public List<Clothes> findClothes(@RequestParam final String brand,
+    public List<Clothes> findClothes(@RequestParam final int temperature,
                                      @RequestParam final String color) {
-        System.out.println("Finding clothes with " + brand + " and " + color);
-        return repository.findAllByBrandAndColor(brand, color);
+        System.out.println("Finding " + color + " clothes for " + temperature + " degrees");
+        return repository.findAllByTemperatureAndColor(temperature, color);
     }
 
     @DeleteMapping("/remove")
-    public void removeClothes(@RequestParam final String brand,
-                              @RequestParam final String color,
-                              @RequestParam final int size) {
-        Clothes item = repository.findFirstByBrandAndColorAndSize(brand, color, size);
+    public void removeClothes(@RequestParam final int temperature,
+                              @RequestParam final String color) {
+        Clothes item = repository.findFirstByTemperatureAndColor(temperature, color);
         System.out.println("Removing from closet: " + item.toString());
         repository.delete(item);
     }
@@ -58,7 +71,7 @@ public class ClosetController {
     @GetMapping("/weather/{location}")
     @ResponseBody
     public String getWeather(@PathVariable final String location) {
-        return closetService.retrieveCurrentWeather(location);
+        return weatherService.retrieveCurrentWeather(location);
     }
 
 }

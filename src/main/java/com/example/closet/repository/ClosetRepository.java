@@ -9,7 +9,9 @@ import java.util.List;
 @Repository
 public interface ClosetRepository extends MongoRepository<Clothes, String> {
 
-    List<Clothes> findAllByBrandAndColor(String brand, String color);
+    List<Clothes> findAllByTemperatureAndColor(int temperature, String color);
 
-    Clothes findFirstByBrandAndColorAndSize(String brand, String color, int size);
+    List<Clothes> findAllByTemperatureBetweenAndColor(int tempStart, int tempEnd, String color);
+
+    Clothes findFirstByTemperatureAndColor(int temperature , String color);
 }
